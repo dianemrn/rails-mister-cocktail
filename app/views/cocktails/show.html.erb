@@ -1,41 +1,32 @@
-
-<div class="banner" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.2)), url( <%= @cocktail.photo %> );">
-    <h1><%= @cocktail.name %></h1>
-</div>
-
 <div class="container">
-  <div class="wrapper">
 
-    <div class="card-show">
-      <h3>Description</h3>
-      <h4><%= @cocktail.description %></h4>
+  <h1><%= @cocktail.name %></h1>
+  <%= link_to "Back to all cocktails", root_path %>
 
-      <%= link_to "Edit the description", edit_cocktail_path(@cocktail), class: "btn btn-info" %>
-
+  <div class="row">
+    <div class="col-sm-12 col-md-6">
+      <h3>Recipe</h3>
+      <table class="table table-bordered">
+        <tbody>
+          <thead>
+            <th>Ingredient</th>
+            <th>Description</th>
+            <th>Action</th>
+          </thead>
+          <% @cocktail.doses.each do |dose| %>
+            <tr>
+              <td><%= dose.ingredient.name %></td>
+              <td><%= dose.description %></td>
+              <td>
+                <%= link_to dose_path(dose), method: :delete, data: { confirm: "Are you sure?" } do %>
+                  <i class="fa fa-trash destroy_dose"></i>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
     </div>
-
-    <div class="card-show">
-      <h3>Ingredients</h3>
-      <% @cocktail.doses.each do |dose| %>
-        <ul class="list-unstyled">
-          <li>
-          <strong><%= dose.ingredient.name %></strong>
-            <%= dose.description %>
-
-            <%= link_to(dose_path(dose), method: :delete, data: { confirm: "Are you sure?" }) do %>
-              <i class="fa fa-trash-o" aria-hidden="true"></i>
-            <% end %>
-
-          </li>
-        </ul>
-      <% end %>
-
-       <%= simple_form_for [@cocktail, @dose] do |f| %>
-         <%= f.input :description %>
-         <%= f.input :ingredient_id, collection: Ingredient.all %>
-         <%= f.button :submit, class: "btn btn-info" %>
-       <% end %>
+    <div class="col-sm-12 col-md-6">
     </div>
-
   </div>
-</div>
